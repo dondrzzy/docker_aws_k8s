@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: story-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: story
+  template:
+    metadata:
+      labels:
+        app: story
+    spec:
+      containers:
+        - name: story
+          image:  dondrzzy/kub-data-demo:1
+          volumeMounts:
+            - mountPath: /app/story  # our app stores files in the /app workdir and /story dir
+              name: story-volume
+      volumes:
+        - name: story-volume
+          # emptyDir: {} # this driver creates an empty dir per pod and this volume is only accessible as long as the pod is running, works for one replica where you have one pod
+          hostPath:
+            path: /data # kidn of like a bind mount
+            type: DirectoryOrCreate # create if it doesnt exist

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment # kind of object k8s should create, could be service, pods etc
+metadata:
+  name: second-node-deployment
+  labels:
+    release: example
+spec: # specification of the deployment. How the deployment should be configured
+  replicas: 1 # number of pod instances to launch
+  selector:
+    matchLabels: # specify key value pairs of the pods we want to match with this deployment or we want the deployment to control
+      app: second-app
+  template: # defines the pods that should be created, image to use for containers in the pods
+    metadata: # since a pod is an object, no need to add a kind since it will always be a pod object
+      labels:
+        app: second-app
+    spec: # specification of the individual pod
+      containers:
+        # - name: 
+        #   image: 
+        - name: second-node
+          image: dondrzzy/k8s-first-app:2
+          livenessProbe:
+            httpGet: # request to be sent by k8s to the running application
+              path: '/'
+              port: 8080
+            periodSeconds: 10 # how often this check should be performed
+            initialDelaySeconds: 5 # how long k8s should wait before it can run the first check
+
+
+
+
+
