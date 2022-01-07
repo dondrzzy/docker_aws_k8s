@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tasks-deployment
+spec:
+  replicas: 1 # deploy one instance of a pod with a container
+  selector:
+    matchLabels:
+      app: tasks
+  template:
+    metadata:
+      labels:
+        app: tasks
+    spec:
+      containers:
+        - name: tasks
+          image: dondrzzy/kub-demo-tasks:3
+          env:
+            - name: AUTH_ADDRESS
+              value: "auth-service.default"
+            - name: TASKS_FOLDER
+              value: tasks

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec: # specify which pods should be part of this service
+  selector:
+    app: users
+  type: LoadBalancer # this creates an outside ip address and distributes incoming traffic accross all pods
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080 # container internal port on which it expects requests
+

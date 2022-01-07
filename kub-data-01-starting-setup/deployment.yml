@@ -14,13 +14,22 @@ spec:
     spec:
       containers:
         - name: story
-          image:  dondrzzy/kub-data-demo:1
+          image:  dondrzzy/kub-data-demo:2
+          env:
+            - name: STORY_FOLDER
+              # value: 'story'
+              valueFrom:
+                configMapKeyRef:
+                  name: data-store-env # name of the config map
+                  key: folder
           volumeMounts:
             - mountPath: /app/story  # our app stores files in the /app workdir and /story dir
               name: story-volume
       volumes:
         - name: story-volume
           # emptyDir: {} # this driver creates an empty dir per pod and this volume is only accessible as long as the pod is running, works for one replica where you have one pod
-          hostPath:
-            path: /data # kidn of like a bind mount
-            type: DirectoryOrCreate # create if it doesnt exist
+          # hostPath:
+          #   path: /data # kidn of like a bind mount
+          #   type: DirectoryOrCreate # create if it doesnt exist
+          persistentVolumeClaim: # can use the same claim in different pods
+            claimName: host-pvc

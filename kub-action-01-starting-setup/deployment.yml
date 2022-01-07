@@ -25,8 +25,3 @@ spec: # specification of the deployment. How the deployment should be configured
               port: 8080
             periodSeconds: 10 # how often this check should be performed
             initialDelaySeconds: 5 # how long k8s should wait before it can run the first check
-
-
-
-
-

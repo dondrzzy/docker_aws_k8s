@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-deployment
+spec: # specification for the deployment
+  replicas: 1 # deploy one instance of a pod for a container
+  selector:
+    matchLabels:
+      app: users
+  template: # set up the pod template
+    metadata:
+      labels:
+        app: users # this is up to you
+    spec: # spec for the pod
+      containers:
+        - name: users
+          image: dondrzzy/kub-demo-users:latest
+          env:
+            - name: AUTH_ADDRESS
+              # value: localhost # for internal pod communication
+              #value: "10.105.67.236" # this can work but is too manual. K8s auto generates env vars when a service is created and we can use that format SERVICE_NAME_SERVIVE_HOST
+              value: "auth-service.default" # auth-service is the service name, default is the default namespace. This on the internal network is transformed into the service ip address
